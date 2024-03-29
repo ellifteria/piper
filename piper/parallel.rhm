@@ -5,23 +5,23 @@ import:
   lib("racket/future.rkt") as future
   piper/utils only:
     merge
-    reduce
+    filter
     append
 
 export:
   par_map
-  par_reduce
+  par_filter
 
 fun par_map (lst, fn):
   def ftr_lst = lst.map(fun (value): future.future(fun (): fn(value)))
   def rslt_lst = ftr_lst.map(fun (ftr): future.touch(ftr))
   rslt_lst
 
-fun par_reduce (lst, pred):
+fun par_filter (lst, pred):
   def ftr_lst = lst.map(fun (value): future.future(fun (): pred(value)))
   def bool_lst = ftr_lst.map(fun (ftr): future.touch(ftr))
   def merged_lst = utils.merge(lst, bool_lst)
-  def red_lst = utils.reduce(merged_lst, fun (x): x[1])
+  def red_lst = utils.filter(merged_lst, fun (x): x[1])
   def mutable rslt_lst = []
   cond
   | lst is_a List:

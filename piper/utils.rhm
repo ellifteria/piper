@@ -4,19 +4,19 @@ import:
   piper/pipe open
 
 export:
-  reduce
+  filter
   append
   merge
 
 fun
-| reduce (lst :: List, pred :: Function):
+| filter (lst :: List, pred :: Function):
     def mutable rslt_lst = []
     for (value: lst):
       if pred(value)
       | rslt_lst := rslt_lst.add(value)
       | rslt_lst := rslt_lst
     rslt_lst
-| reduce (lst :: PairList, pred :: Function):
+| filter (lst :: PairList, pred :: Function):
     def mutable rslt_lst = PairList()
     for (value: lst):
       if pred(value)
