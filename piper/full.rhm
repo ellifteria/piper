@@ -1,13 +1,9 @@
 #lang rhombus
 
 import:
-  piper/pipe open
-  piper/parallel open
-  piper/composition open
-  piper/utils open
+  piper/operators open
+  piper/lists open
 
 export:
-  all_from(piper/pipe)
-  all_from(piper/parallel)
-  all_from(piper/composition)
-  all_from(piper/utils)
+  all_from(piper/operators)
+  all_from(piper/lists)

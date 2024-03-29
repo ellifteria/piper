@@ -1,0 +1,53 @@
+#lang rhombus
+
+import:
+  lib("racket/future.rkt") as future
+  piper/pipes open
+
+export:
+  filter
+  append
+  zip
+  unzip
+  par_map
+  par_filter
+
+fun par_map (lst, fn :: Function):
+  def ftr_lst = lst.map(fun (value): future.future(fun (): fn(value)))
+  def rslt_lst = ftr_lst.map(fun (ftr): future.touch(ftr))
+  rslt_lst
+
+fun par_filter (lst, pred :: Function):
+  def ftr_lst = lst.map(fun (value): future.future(fun (): pred(value)))
+  def bool_lst = ftr_lst.map(fun (ftr): future.touch(ftr))
+  def merged_lst = zip(lst, bool_lst)
+  def fltrd_lst = filter(merged_lst, fun (x): x[1])
+  def rslt_lst = unzip(fltrd_lst)[0]
+  rslt_lst
+
+fun
+| filter(lst :: List, pred :: Function) :: List:
+    for List (elem: lst):
+      keep_when pred(elem)
+      elem
+| filter(lst :: PairList, pred :: Function) :: PairList:
+    for PairList (elem: lst):
+      keep_when pred(elem)
+      elem
+
+fun
+| append (lst :: List, value):
+    lst.add(value)
+| append (lst :: PairList, value):
+    lst |> PairList.reverse |> fun (curr_lst) : PairList.cons(value, curr_lst) |> PairList.reverse
+
+fun
+| zip (lst1 :: List, lst2):
+    for List (val1 : lst1, val2 : lst2):
+      [val1, val2]
+| zip (lst1 :: PairList, lst2):
+    for PairList (val1 : lst1, val2 : lst2):
+      [val1, val2]
+
+fun unzip(lst):
+  [lst.map(fun (elem) : elem[0]), lst.map(fun (elem) : elem[1])]
