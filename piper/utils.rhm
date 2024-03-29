@@ -1,0 +1,39 @@
+#lang rhombus
+
+import:
+  piper/pipe open
+
+export:
+  reduce
+  append
+  merge
+
+fun
+| reduce (lst :: List, pred :: Function):
+    def mutable rslt_lst = []
+    for (value: lst):
+      if pred(value)
+      | rslt_lst := rslt_lst.add(value)
+      | rslt_lst := rslt_lst
+    rslt_lst
+| reduce (lst :: PairList, pred :: Function):
+    def mutable rslt_lst = PairList()
+    for (value: lst):
+      if pred(value)
+      | rslt_lst := append(rslt_lst, value)
+      | rslt_lst := rslt_lst
+    rslt_lst
+
+fun
+| append (lst :: List, value):
+    lst.add(value)
+| append (lst :: PairList, value):
+    lst |> PairList.reverse |> fun (curr_lst) : PairList.cons(value, curr_lst) |> PairList.reverse
+
+fun
+| merge (lst1 :: List, lst2):
+    for List (val1 : lst1, val2 : lst2):
+      [val1, val2]
+| merge (lst1 :: PairList, lst2):
+    for PairList (val1 : lst1, val2 : lst2):
+      [val1, val2]

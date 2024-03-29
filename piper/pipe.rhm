@@ -1,0 +1,39 @@
+#lang rhombus
+
+export:
+  |>
+  ||>
+  |||>
+  <|
+  <||
+  <|||
+
+operator (x |> fn):
+  ~associativity: ~left
+  fn(x)
+
+operator ([x, y] ||> fn):
+  ~same_as: |>
+  ~associativity: ~left
+  fn(x, y)
+
+operator ([x, y, z] |||> fn):
+  ~same_as: |>
+  ~associativity: ~left
+  fn(x, y, z)
+
+operator (fn <| x):
+  ~same_as: |>
+  ~associativity: ~right
+  fn(x)
+
+operator (fn <|| [x, y]):
+  ~same_as: <|
+  ~associativity: ~right
+  fn(x, y)
+
+operator (fn <||| [x, y, z]):
+  ~same_as: <|
+  ~associativity: ~right
+  fn(x, y, z)
+  

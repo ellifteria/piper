@@ -1,0 +1,18 @@
+#lang rhombus
+
+import:
+  piper/pipe only:
+    |>
+    <|
+
+export:
+  >>
+  <<
+
+operator (f >> g) :: Function:
+  ~stronger_than: pipe.|>
+  fun (x, ...): g(f(x, ...))
+
+operator (f << g) :: Function:
+  ~same_as: >>
+  fun (x, ...): f(g(x, ...))
