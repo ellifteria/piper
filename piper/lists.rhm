@@ -6,7 +6,6 @@ import:
 
 export:
   filter
-  append
   zip
   unzip
   par_map
@@ -34,12 +33,6 @@ fun
     for PairList (elem: lst):
       keep_when pred(elem)
       elem
-
-fun
-| append (lst :: List, value):
-    lst.add(value)
-| append (lst :: PairList, value):
-    lst |> PairList.reverse |> fun (curr_lst) : PairList.cons(value, curr_lst) |> PairList.reverse
 
 fun
 | zip (lst1 :: List, lst2):
